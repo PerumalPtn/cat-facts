@@ -1,23 +1,57 @@
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+import { getCatFacts } from './services';
+
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
+
+const style = {
+  width: '100%',
+
+  bgcolor: 'background.paper',
+};
 
 function App() {
+
+  const [catFacts, setCatFacts] = useState([]);
+
+
+  useEffect(() => {
+
+    getCatFacts(10).then((catFactsResponse) => {
+
+      setCatFacts(catFactsResponse);
+
+    });
+
+  }, [])
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+      <List sx={style} component="nav" aria-label="mailbox folders">
+
+        {
+
+          catFacts.map((catFact, index) => {
+            return (
+              <React.Fragment key={index}>
+                <ListItem button>
+                  <ListItemText primary={catFact.fact} />
+                </ListItem>
+                <Divider />
+              </React.Fragment>
+            )
+          })
+
+        }
+
+
+      </List>
+
     </div>
   );
 }
